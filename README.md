@@ -2,6 +2,8 @@
 
 personal ergodox layout
 
+see the [key mapping](./keymap.c)
+
 ## scripts
 
 ### build
