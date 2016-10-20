@@ -1,0 +1,20 @@
+{
+  "name": "ergodox-layout",
+  "version": "0.0.0",
+  "description": "my personal ergodox ez keyboard layout",
+  "main": "index.js",
+  "scripts": {
+    "build": "docker run --rm -v $(pwd):/keymap potz/ergodox-ez-compiler",
+    "flash": "./setup-teensy && ./teensy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahdinosaur/ergodox-layout.git"
+  },
+  "author": "Mikey <michael.williams@enspiral.com> (http://dinosaur.os)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ahdinosaur/ergodox-layout/issues"
+  },
+  "homepage": "https://github.com/ahdinosaur/ergodox-layout#readme"
+}

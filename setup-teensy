@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ! test -e teensy
+then
+  curl https://www.pjrc.com/teensy/teensy.64bit.gz > teensy.gz
+  gzip -d teensy.gz
+  chmod +x teensy
+fi
