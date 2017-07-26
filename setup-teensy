@@ -2,7 +2,9 @@
 
 if ! test -e teensy
 then
-  curl https://www.pjrc.com/teensy/teensy.64bit.gz > teensy.gz
-  gzip -d teensy.gz
+  curl https://www.pjrc.com/teensy/teensy_linux64.tar.gz > teensy.tar.gz
+  tar -xf teensy.tar.gz
   chmod +x teensy
+  wget https://www.pjrc.com/teensy/49-teensy.rules
+  sudo cp 49-teensy.rules /etc/udev/rules.d/
 fi
