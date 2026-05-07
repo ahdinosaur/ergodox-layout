@@ -1,26 +1,26 @@
-KEYBOARD := ergodox_ez
-KEYMAP   := dinosaur
+.SILENT:
 
-QMK_HOME      ?= $(HOME)/qmk_firmware
-KEYMAP_TARGET := $(QMK_HOME)/keyboards/$(KEYBOARD)/keymaps/$(KEYMAP)
+MAKEFLAGS += --no-print-directory
 
-.PHONY: help build flash clean setup link
+QMK_USERSPACE := $(patsubst %/,%,$(dir $(shell realpath "$(lastword $(MAKEFILE_LIST))")))
+ifeq ($(QMK_USERSPACE),)
+    QMK_USERSPACE := $(shell pwd)
+endif
+
+QMK_FIRMWARE_ROOT = $(shell qmk config -ro user.qmk_home 2>/dev/null | cut -d= -f2 | sed -e 's@^None$$@@g')
+
+.PHONY: help setup build flash clean
 
 help:
 	@echo "Targets:"
-	@echo "  make setup  - one-time: install qmk + clone qmk_firmware + symlink this keymap"
-	@echo "  make build  - compile firmware (.hex / .bin)"
-	@echo "  make flash  - compile and flash (put keyboard in bootloader first)"
-	@echo "  make clean  - remove build artifacts"
-
-build: link
-	qmk compile -kb $(KEYBOARD) -km $(KEYMAP)
-
-flash: link
-	qmk flash -kb $(KEYBOARD) -km $(KEYMAP)
-
-clean:
-	qmk clean
+	@echo "  make setup            one-time: install qmk_firmware + register this dir as the userspace overlay"
+	@echo "  make build            compile every target listed in qmk.json (qmk userspace-compile)"
+	@echo "  make flash            compile and flash ergodox_ez:dinosaur (put keyboard in bootloader first)"
+	@echo "  make clean            remove build artifacts"
+	@echo ""
+	@echo "Or use any qmk_firmware make target directly, e.g.:"
+	@echo "  make ergodox_ez:dinosaur          # compile"
+	@echo "  make ergodox_ez:dinosaur:flash    # compile + flash"
 
 setup:
 	@command -v qmk >/dev/null 2>&1 || { \
@@ -29,12 +29,21 @@ setup:
 		echo "  pipx install qmk                # Linux/macOS"; \
 		echo "  python3 -m pip install --user qmk"; \
 		exit 1; }
-	@test -d "$(QMK_HOME)" || qmk setup -y -H "$(QMK_HOME)"
-	@$(MAKE) link
+	@test -n "$(QMK_FIRMWARE_ROOT)" -a -d "$(QMK_FIRMWARE_ROOT)" || qmk setup -y
+	qmk config user.overlay_dir="$(QMK_USERSPACE)"
 	@echo "Setup complete. Try 'make build'."
 
-link: $(KEYMAP_TARGET)
+build:
+	qmk userspace-compile
 
-$(KEYMAP_TARGET):
-	@test -d "$(QMK_HOME)" || { echo "QMK_HOME not found at $(QMK_HOME). Run 'make setup' first."; exit 1; }
-	ln -sfn "$(CURDIR)" "$(KEYMAP_TARGET)"
+flash:
+	qmk flash -kb ergodox_ez -km dinosaur
+
+clean:
+	qmk clean
+
+# Catch-all: forward everything else (e.g. `ergodox_ez:dinosaur`) to qmk_firmware's Makefile.
+%:
+	@test -n "$(QMK_FIRMWARE_ROOT)" -a -d "$(QMK_FIRMWARE_ROOT)" || { \
+		echo "qmk_firmware not found. Run 'make setup' first."; exit 1; }
+	+$(MAKE) -C $(QMK_FIRMWARE_ROOT) $(MAKECMDGOALS) QMK_USERSPACE=$(QMK_USERSPACE)

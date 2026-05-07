@@ -1,9 +1,11 @@
 # ergodox-layout
 
-My personal [Ergodox EZ](https://www.zsa.io/ergodox/) keyboard layout, built on
-[QMK firmware](https://qmk.fm).
+My personal [Ergodox EZ](https://www.zsa.io/ergodox/) keyboard layout, built as
+a [QMK External Userspace](https://docs.qmk.fm/newbs_external_userspace) repo
+on top of [QMK firmware](https://qmk.fm).
 
-See [`keymap.c`](./keymap.c) for the layer mappings.
+See [`keyboards/ergodox_ez/keymaps/dinosaur/keymap.c`](./keyboards/ergodox_ez/keymaps/dinosaur/keymap.c)
+for the layer mappings.
 
 ## Setup
 
@@ -14,15 +16,16 @@ brew install qmk/qmk/qmk        # macOS
 pipx install qmk                # Linux / macOS
 ```
 
-Then clone the QMK firmware and symlink this keymap into it:
+Then clone QMK firmware and register this repo as the userspace overlay:
 
 ```sh
 make setup
 ```
 
-This puts the firmware tree at `~/qmk_firmware` (override with `QMK_HOME=...`)
-and links this directory into
-`~/qmk_firmware/keyboards/ergodox_ez/keymaps/dinosaur`.
+This runs `qmk setup` (clones `qmk_firmware` to `~/qmk_firmware` if absent) and
+sets `user.overlay_dir` to point at this directory. After that, QMK reads build
+targets from [`qmk.json`](./qmk.json) and finds the keymap under
+`keyboards/ergodox_ez/keymaps/dinosaur/`.
 
 ## Build
 
@@ -30,8 +33,15 @@ and links this directory into
 make build
 ```
 
-The compiled firmware lands in `~/qmk_firmware/` as
+This runs `qmk userspace-compile`, which builds every target listed in
+`qmk.json`. The compiled firmware lands at the qmk_firmware root as
 `ergodox_ez_base_dinosaur.hex`.
+
+You can also drive the underlying make target directly:
+
+```sh
+make ergodox_ez:dinosaur
+```
 
 ## Flash
 
@@ -47,5 +57,16 @@ GUI alternatives: [Wally](https://www.zsa.io/wally) or
 
 ## CI
 
-Every push builds the firmware on GitHub Actions and uploads the `.hex` as a
-workflow artifact — see [`.github/workflows/build.yml`](./.github/workflows/build.yml).
+Every push and pull request runs the official QMK userspace
+[reusable workflow](https://github.com/qmk/.github/blob/main/.github/workflows/qmk_userspace_build.yml)
+to validate the firmware builds. Pushing a git tag additionally runs the
+[publish workflow](https://github.com/qmk/.github/blob/main/.github/workflows/qmk_userspace_publish.yml)
+to attach the `.hex` to a GitHub Release named after the tag. See
+[`.github/workflows/build.yml`](./.github/workflows/build.yml).
+
+Cut a release with:
+
+```sh
+git tag v1.0
+git push origin v1.0
+```

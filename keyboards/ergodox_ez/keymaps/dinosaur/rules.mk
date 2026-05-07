@@ -1,8 +1,10 @@
 # Build features used by this keymap.
 # https://docs.qmk.fm/squeezing_avr
 
-MOUSEKEY_ENABLE   = yes  # KC_MS_*, KC_BTN1/2 on the MDIA layer
+MOUSEKEY_ENABLE   = yes  # MS_*, MS_BTN1/2 on the MDIA layer
 EXTRAKEY_ENABLE   = yes  # KC_VOL*, KC_MUTE, KC_MPLY, KC_WBAK on the MDIA layer
+
+LTO_ENABLE        = yes  # link-time optimization, smaller binary on AVR
 
 COMMAND_ENABLE    = no
 CONSOLE_ENABLE    = no

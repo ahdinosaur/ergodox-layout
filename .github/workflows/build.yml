@@ -2,35 +2,24 @@ name: build
 
 on:
   push:
-    branches: [master]
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  firmware:
-    runs-on: ubuntu-latest
-    container: ghcr.io/qmk/qmk_cli
-    steps:
-      - name: Checkout keymap
-        uses: actions/checkout@v4
-        with:
-          path: keymap
+  build:
+    name: Build
+    uses: qmk/.github/.github/workflows/qmk_userspace_build.yml@main
+    with:
+      qmk_repo: qmk/qmk_firmware
+      qmk_ref: master
 
-      - name: Clone QMK firmware
-        run: qmk setup -y -H "$GITHUB_WORKSPACE/qmk_firmware"
-
-      - name: Link keymap into QMK tree
-        run: |
-          ln -sfn "$GITHUB_WORKSPACE/keymap" \
-            "$GITHUB_WORKSPACE/qmk_firmware/keyboards/ergodox_ez/keymaps/dinosaur"
-
-      - name: Compile firmware
-        working-directory: qmk_firmware
-        run: qmk compile -kb ergodox_ez -km dinosaur
-
-      - name: Upload firmware
-        uses: actions/upload-artifact@v4
-        with:
-          name: ergodox_ez_dinosaur
-          path: qmk_firmware/ergodox_ez_*_dinosaur.hex
-          if-no-files-found: error
+  publish:
+    name: Publish
+    if: startsWith(github.ref, 'refs/tags/')
+    uses: qmk/.github/.github/workflows/qmk_userspace_publish.yml@main
+    needs: build
+    with:
+      release_name: ${{ github.ref_name }}

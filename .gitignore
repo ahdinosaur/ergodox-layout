@@ -1,4 +1,16 @@
+# Junk files
+*.bak
+*.swp
+*~
+.DS_Store
+._*
+
+# Firmware files
 *.hex
 *.bin
-*.elf
-.build/
+*.uf2
+
+# clangd
+compile_commands.json
+.clangd/
+.cache/
