@@ -62,6 +62,20 @@
 \→<>?
 ```
 
+---
+
+```
+(left)
+!@#$%
+*_-="
+~/+`'
+
+(right)
+^&[]|
+:(){}
+\→<>?
+```
+
 ### Navigation Layer
 
 - Inspired by https://github.com/manna-harbour/miryoku
