@@ -1,6 +1,11 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
 
+// keyboard-helper integration (submodule at ./keyboard-helper).
+// The ID must match a table key in the host's `keymaps.toml`.
+#define KEYBOARD_HELPER_ID "ergodox-ez-dinosaur"
+#include "keyboard_helper.h"
+
 enum layers {
     BASE,  // default layer
     SYMB,  // symbols
@@ -148,6 +153,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    keyboard_helper_on_key_event(keycode, record);
     if (record->event.pressed) {
         switch (keycode) {
             case VRSN:
@@ -159,6 +165,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
+    keyboard_helper_on_layer_state(state);
+
     ergodox_board_led_off();
     ergodox_right_led_1_off();
     ergodox_right_led_2_off();
@@ -176,4 +184,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     }
 
     return state;
+}
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    keyboard_helper_on_raw_hid(data, length);
 }

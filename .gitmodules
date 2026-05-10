@@ -1,0 +1,3 @@
+[submodule "keyboards/ergodox_ez/keymaps/dinosaur/keyboard-helper"]
+	path = keyboards/ergodox_ez/keymaps/dinosaur/keyboard-helper
+	url = git@github.com:ahdinosaur/keyboard-helper.git

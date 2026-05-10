@@ -12,3 +12,9 @@ TAP_DANCE_ENABLE  = no
 RGBLIGHT_ENABLE   = no
 UNICODE_ENABLE    = no
 NKRO_ENABLE       = no
+
+# keyboard-helper integration (submodule at ./keyboard-helper).
+# See https://github.com/ahdinosaur/keyboard-helper for the protocol.
+RAW_ENABLE = yes
+SRC   += $(KEYMAP_PATH)/keyboard-helper/firmware/qmk/template/keyboard_helper.c
+VPATH += $(KEYMAP_PATH)/keyboard-helper/firmware/qmk/template
