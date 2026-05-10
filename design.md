@@ -1,6 +1,44 @@
 # Layout design
 
+## Home row mods
+
+We use the home row mods of:
+
+```
+(left)
+Super Alt Ctrl Shift
+
+(right)
+Shift Ctrl Alt Super
+```
+
+## Thumbs
+
+The thumbs are:
+
+(Left: Tertiary, Primary, Secondary order)
+
+```
+(left thumbs)
+Escape Backspace Delete
+```
+
+(Right: Secondary, Primary, Tertiary order)
+
+```
+(right thumbs)
+Enter Space Tab
+```
+
 ## Layers
+
+### Thumb mods
+
+We trigger the layers with thumb mods:
+
+```
+
+```
 
 ### Number layer
 
@@ -19,50 +57,11 @@
 
 ### Symbol layer
 
-- I like having `!@#$% ^&*` be where it'd be for a number
-- I want the brackets to be easy
-
-```
-(left)
-!@#$%
-(){}`
-[]<>~
-
-(right)
-^&*/\
-!=+-"
-~|`'?
-```
-
----
-
-```
-(left)
-\@#$%
-(){}&
-[]<>→
-
-(right)
-^"'`:
-!=*-_
-|+/~?
-```
-
----
-
-```
-(left)
-!@#$%
-*_-="
-~/+`'
-
-(right)
-^&{}|
-:()[]
-\→<>?
-```
-
----
+- I want the brackets to be easy.
+- I use Rust, TypeScript, Linux, Markdown, but not too much so.
+- I want to re-use placements with exisnig shifted keys
+  - I like having `!@#$% ^&` be where it'd be for a number.
+  - I like `<>?` where it'd be as shifted `,./`.
 
 ```
 (left)
@@ -104,3 +103,4 @@ Mute Pause/Play Stop
 
 - https://getreuer.info/posts/keyboards/symbol-layer/index.html
 - https://github.com/manna-harbour/miryoku
+- https://precondition.github.io/home-row-mods
