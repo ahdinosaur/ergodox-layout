@@ -1,0 +1,8 @@
+# Manifest for the keyboard-helper app. Point the app at this directory
+# (the root of this repo) and it loads the keymap-drawer YAML referenced
+# below, indexed by the `KEYBOARD_HELPER_ID` the firmware reports — see
+# `keyboards/ergodox_ez/keymaps/dinosaur/keymap.c`.
+
+[keymaps.ergodox-ez-dinosaur]
+file = "ergodox-ez-dinosaur.yaml"
+keyboard = "Ergodox EZ"
