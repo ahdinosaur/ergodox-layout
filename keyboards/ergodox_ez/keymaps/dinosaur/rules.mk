@@ -1,14 +1,21 @@
 # Build features used by this keymap.
 # https://docs.qmk.fm/squeezing_avr
 
-MOUSEKEY_ENABLE   = yes  # MS_*, MS_BTN1/2 on the MDIA layer
-EXTRAKEY_ENABLE   = yes  # KC_VOL*, KC_MUTE, KC_MPLY, KC_WBAK on the MDIA layer
+MOUSEKEY_ENABLE   = no    # new design has no mouse keys
+EXTRAKEY_ENABLE   = yes   # KC_VOL*, KC_MUTE, KC_MPLY/MSTP/MPRV/MNXT on MED layer
 
-LTO_ENABLE        = yes  # link-time optimization, smaller binary on AVR
+TAP_DANCE_ENABLE  = yes   # Boot / Lc / Lo double-tap activators
+LAYER_LOCK_ENABLE = yes   # Lc / Lo use layer_lock_invert()
+
+LTO_ENABLE        = yes
 
 COMMAND_ENABLE    = no
 CONSOLE_ENABLE    = no
-TAP_DANCE_ENABLE  = no
 RGBLIGHT_ENABLE   = no
 UNICODE_ENABLE    = no
 NKRO_ENABLE       = no
+
+# Default-yes features we don't use — disabling trims AVR flash.
+SPACE_CADET_ENABLE = no
+GRAVE_ESC_ENABLE   = no
+MAGIC_ENABLE       = no
