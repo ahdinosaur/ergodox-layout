@@ -58,16 +58,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // Row 4 (extras below alphas)
     KC_GRV,  KC_LCTL, KC_LALT, KC_LEFT, KC_RGHT,
     // Left thumb cluster, args 0..5. See DESIGN.md §Thumbs for the role-to-key
-    // mapping on the Ergodox EZ.
-    //   0 = secondary (LT_DEL → SYM)
-    //   1 = primary   (LT_BSP → NUM)
+    // mapping on the Ergodox EZ. The two big thumb keys are at args 3 and 4.
+    //   0 = extra
+    //   1 = extra
     //   2 = extra
-    //   3 = extra
-    //   4 = extra
+    //   3 = secondary (LT_DEL → SYM)
+    //   4 = primary   (LT_BSP → NUM)
     //   5 = tertiary  (LT_ESC → MED)
-                                                 LT_DEL,  LT_BSP,
+                                                 KC_LALT, KC_LGUI,
                                                           KC_HOME,
-                                        KC_LALT, KC_LGUI, LT_ESC,
+                                        LT_DEL,  LT_BSP,  LT_ESC,
 
     // ---- RIGHT HAND ----
     // Row 0 (top — extras)
@@ -81,16 +81,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // Row 4 (extras)
                       KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC, KC_NO,
     // Right thumb cluster, args 0..5. See DESIGN.md §Thumbs for the role-to-key
-    // mapping on the Ergodox EZ.
-    //   0 = primary   (LT_SPC → NAV)
-    //   1 = secondary (LT_ENT → SYM)
+    // mapping on the Ergodox EZ. The two big thumb keys are at args 4 and 5.
+    //   0 = extra
+    //   1 = extra
     //   2 = extra
     //   3 = tertiary  (LT_TAB → FUN)
-    //   4 = extra
-    //   5 = extra
-    LT_SPC,  LT_ENT,
+    //   4 = primary   (LT_SPC → NAV)
+    //   5 = secondary (LT_ENT → SYM)
+    KC_LALT, KC_RCTL,
     KC_PGUP,
-    LT_TAB,  KC_RCTL, KC_RALT
+    LT_TAB,  LT_SPC,  LT_ENT
 ),
 
 // NUM — Number layer (right hand active; trigger LT_BSP on left primary thumb).
@@ -101,10 +101,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_NO,
     KC_TRNS, KC_NO,   KC_NO,   TD(TD_LO), TD(TD_LC), KC_NO,  KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-    // Left thumb: extras TRNS; trigger LT_BSP (primary, arg 1) TRNS; other LT thumbs NO
-                                                 KC_NO,   KC_TRNS,
+    // Left thumb: extras TRNS; trigger LT_BSP (primary, arg 4) TRNS; other LT thumbs NO
+                                                 KC_TRNS, KC_TRNS,
                                                           KC_TRNS,
-                                        KC_TRNS, KC_TRNS, KC_NO,
+                                        KC_NO,   KC_TRNS, KC_NO,
 
     // ---- RIGHT HAND (active — numpad) ----
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -112,10 +112,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              KC_ASTR, KC_4,    KC_5,    KC_6,    KC_PLUS, KC_TRNS,
     KC_TRNS, KC_PERC, KC_1,    KC_2,    KC_3,    KC_CIRC, KC_TRNS,
                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-    // Right thumb: extras TRNS; numpad continuation `0 . =` on primary / secondary / tertiary.
-    KC_0,    KC_DOT,
+    // Right thumb: extras TRNS; numpad continuation `. 0 =` on secondary (arg 5) / primary (arg 4) / tertiary (arg 3).
+    KC_TRNS, KC_TRNS,
     KC_TRNS,
-    KC_EQL,  KC_TRNS, KC_TRNS
+    KC_EQL,  KC_0,    KC_DOT
 ),
 
 // NAV — Navigation layer (left hand active; trigger LT_SPC on right primary thumb).
@@ -137,10 +137,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              KC_NO,   KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, KC_TRNS,
     KC_TRNS, KC_NO,   TD(TD_LC), TD(TD_LO), KC_NO, KC_NO, KC_TRNS,
                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-    // Right thumb: extras TRNS; trigger LT_SPC (primary, arg 0) TRNS; other LT thumbs NO
-    KC_TRNS, KC_NO,
+    // Right thumb: extras TRNS; trigger LT_SPC (primary, arg 4) TRNS; other LT thumbs NO
+    KC_TRNS, KC_TRNS,
     KC_TRNS,
-    KC_NO,   KC_TRNS, KC_TRNS
+    KC_NO,   KC_TRNS, KC_NO
 ),
 
 // MED — Media layer (right hand active; trigger LT_ESC on left tertiary thumb).
@@ -152,9 +152,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_NO,   KC_NO,   TD(TD_LO), TD(TD_LC), KC_NO, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     // Left thumb: extras TRNS; trigger LT_ESC (tertiary, arg 5) TRNS; other LT thumbs NO
-                                                 KC_NO,   KC_NO,
+                                                 KC_TRNS, KC_TRNS,
                                                           KC_TRNS,
-                                        KC_TRNS, KC_TRNS, KC_TRNS,
+                                        KC_NO,   KC_NO,   KC_TRNS,
 
     // ---- RIGHT HAND (active) ----
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -188,9 +188,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_NO,   TD(TD_LC), TD(TD_LO), KC_NO, KC_NO, KC_TRNS,
                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     // Right thumb: extras TRNS; trigger LT_TAB (tertiary, arg 3) TRNS; other LT thumbs NO
-    KC_NO,   KC_NO,
+    KC_TRNS, KC_TRNS,
     KC_TRNS,
-    KC_TRNS, KC_TRNS, KC_TRNS
+    KC_TRNS, KC_NO,   KC_NO
 ),
 
 // SYM — Symbol layer (bilateral; triggers LT_DEL on left secondary OR LT_ENT on right secondary).
@@ -201,10 +201,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_ASTR, KC_UNDS, KC_MINS, KC_EQL,  KC_DQT,
     KC_TRNS, KC_TILD, KC_SLSH, KC_PLUS, KC_GRV,  KC_QUOT, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-    // Left thumb: extras TRNS; trigger LT_DEL (secondary, arg 0) TRNS; other LT thumbs NO
-                                                 KC_TRNS, KC_NO,
+    // Left thumb: extras TRNS; trigger LT_DEL (secondary, arg 3) TRNS; other LT thumbs NO
+                                                 KC_TRNS, KC_TRNS,
                                                           KC_TRNS,
-                                        KC_TRNS, KC_TRNS, KC_NO,
+                                        KC_TRNS, KC_NO,   KC_NO,
 
     // ---- RIGHT HAND ----
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -212,10 +212,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              KC_COLN, KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR, KC_TRNS,
     KC_TRNS, KC_BSLS, RIGHT_ARROW, KC_LT, KC_GT, KC_QUES, KC_TRNS,
                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-    // Right thumb: extras TRNS; trigger LT_ENT (secondary, arg 1) TRNS; other LT thumbs NO
-    KC_NO,   KC_TRNS,
+    // Right thumb: extras TRNS; trigger LT_ENT (secondary, arg 5) TRNS; other LT thumbs NO
+    KC_TRNS, KC_TRNS,
     KC_TRNS,
-    KC_NO,   KC_TRNS, KC_TRNS
+    KC_NO,   KC_NO,   KC_TRNS
 ),
 
 };
@@ -232,10 +232,10 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
         'L','L','L','L','L','L',
         'L','L','L','L','L','L','L',
         'L','L','L','L','L',
-        // Left thumb: LT thumbs '*' (args 0, 1, 5); extras 'L' (args 2, 3, 4)
-                                  '*','*',
+        // Left thumb: LT thumbs '*' (args 3, 4, 5); extras 'L' (args 0, 1, 2)
+                                  'L','L',
                                        'L',
-                              'L','L','*',
+                              '*','*','*',
 
         // ---- RIGHT HAND ----
         'R','R','R','R','R','R','R',
@@ -243,10 +243,10 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
         'R','R','R','R','R','R',
         'R','R','R','R','R','R','R',
         'R','R','R','R','R',
-        // Right thumb: LT thumbs '*' (args 0, 1, 3); extras 'R' (args 2, 4, 5)
-        '*','*',
+        // Right thumb: LT thumbs '*' (args 3, 4, 5); extras 'R' (args 0, 1, 2)
+        'R','R',
             'R',
-        '*','R','R'
+        '*','*','*'
     );
 
 // Flow Tap: limit to alpha/punctuation typing keys. Omitting KC_SPC (and
