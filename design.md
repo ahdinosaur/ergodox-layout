@@ -128,6 +128,10 @@ Triggered by left tertiary thumb key.
 
 Right thumb keys are the same as base, to allow for auto-repeat.
 
+## Maybes?
+
+- Smart-Mouse: https://github.com/urob/zmk-config?tab=readme-ov-file#smart-mouse
+
 ## Inspiration
 
 - https://github.com/manna-harbour/miryoku
