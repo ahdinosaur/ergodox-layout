@@ -29,6 +29,8 @@ Settings:
 - [`CHORDAL_HOLD`](https://docs.qmk.fm/tap_hold#chordal-hold)
 - [`SPECULATIVE_HOLD`](https://docs.qmk.fm/tap_hold#speculative-hold)
 
+Thumb layer-taps are marked `'*'` in `chordal_hold_layout` (exempt from the opposite-hand rule), so the trigger-side extras (Boot/Lc/Lo) chord with the held trigger thumb. This is ZSA Oryx's default behavior as of June 2025.
+
 ## Thumbs
 
 ```
@@ -75,7 +77,7 @@ Home-row alphas are mod-taps. Thumbs are layer-taps. See sections above for assi
 
 ### Number layer
 
-Hold left primary (Bsp). Active hand: right.
+Hold left primary (Bsp). Active: right hand.
 
 ```
   Boot   NO     NO     NO     NO         /      7      8      9      -
@@ -87,14 +89,14 @@ Hold left primary (Bsp). Active hand: right.
 
 - Right hand: numpad style, inspired by the Moonlander symbol layer and getreuer's number layer.
 - Right thumbs continue the numpad (`. 0 =`).
-- `Lo` = lock Nav (opposite of Num).
+- `Lo` = lock Nav (opposite of Number).
 
 ### Navigation layer
 
-Hold right primary (Spc). Active hand: left.
+Hold right primary (Spc). Active: left hand.
 
 ```
-  Redo   Past   Copy   Cut    Undo       NO     NO     NO     NO     Boot
+  Redo   Paste  Copy   Cut    Undo       NO     NO     NO     NO     Boot
   Caps   Left   Down   Up     Right      NO     Sft    Ctl    Alt    Sup
   Ins    Home   PgDn   PgUp   End        NO     Lc     Lo     NO     NO
 
@@ -102,7 +104,8 @@ Hold right primary (Spc). Active hand: left.
 ```
 
 - Inspired by Miryoku.
-- Left thumbs stay as base (Esc/Bsp/Del) so Backspace and friends remain available while navigating.
+- `Caps` = Caps Lock (`KC_CAPS`).
+- Left thumbs stay as base (Esc/Bsp/Del), so they remain available (auto-repeat, normal use) while Nav is held.
 - `Lo` = lock Number (opposite of Nav).
 
 ### Symbol layer
@@ -114,10 +117,10 @@ Hold left secondary (Del) **or** right secondary (Ent). Active: both hands.
   *      _      -      =      "          :      (      )      {      }
   ~      /      +      `      '          \      →      <      >      ?
 
-                NO     NO     NO         NO     NO     NO
+                NO     NO     --         --     NO     NO
 ```
 
-- All thumbs are `NO` (since either secondary can trigger, both hands' thumbs are trigger-adjacent).
+- Both secondary thumbs trigger Symbol (`--`); other thumbs are `NO` since both hands' thumbs are trigger-adjacent.
 - No additional features (no clear trigger-side hand).
 - No home-row mods (positions taken by symbols).
 - Brackets pair on adjacent positions: `[]` `{}` `()`.
@@ -125,11 +128,11 @@ Hold left secondary (Del) **or** right secondary (Ent). Active: both hands.
 - `< > ?` kept where they are as shifted `, . /` on Colemak.
 - `~ /` adjacent (left bottom) for shell paths.
 - `( )` adjacent on right index/middle for autocomplete-friendly typing.
-- `→` (right bottom col 2) is a TBD placeholder slot.
+- `→` (right hand, bottom row index) is a TBD placeholder slot.
 
 ### Fun layer
 
-Hold right tertiary (Tab). Active hand: left.
+Hold right tertiary (Tab). Active: left hand.
 
 ```
   F12    F7     F8     F9     PrSc       NO     NO     NO     NO     Boot
@@ -139,12 +142,12 @@ Hold right tertiary (Tab). Active hand: left.
                 Esc    Bsp    Del        NO     --     NO
 ```
 
-- Left thumbs stay as base (Esc/Bsp/Del) to allow auto-repeat / use while on Fun.
+- Left thumbs stay as base (Esc/Bsp/Del), so they remain available (auto-repeat, normal use) while Fun is held.
 - `Lo` = lock Media (opposite of Fun).
 
 ### Media layer
 
-Hold left tertiary (Esc). Active hand: right.
+Hold left tertiary (Esc). Active: right hand.
 
 ```
   Boot   NO     NO     NO     NO         NO     NO     NO     NO     NO
@@ -154,7 +157,7 @@ Hold left tertiary (Esc). Active hand: right.
                 NO     --     NO         Ent    Spc    Tab
 ```
 
-- Right thumbs stay as base (Ent/Spc/Tab) to allow auto-repeat / use while on Media.
+- Right thumbs stay as base (Ent/Spc/Tab), so they remain available (auto-repeat, normal use) while Media is held.
 - Top row right hand intentionally empty for now.
 - `Lo` = lock Fun (opposite of Media).
 
@@ -182,7 +185,7 @@ Hold left tertiary (Esc). Active hand: right.
 
 Ideas to consider after the base design has been used for a while:
 
-- **Two-layers-held "adjust" layer** — e.g., simultaneous Num + Nav unlocks a tri-state layer for system bits (EE_CLR, RGB controls, etc.).
+- **Two-layers-held "adjust" layer** — e.g., simultaneous Number + Nav unlocks a tri-state layer for system bits (EE_CLR, RGB controls, etc.).
 - **Mouse layer** — cursor, scroll, buttons. Possibly urob's "smart mouse" pattern (auto-activates from Nav, auto-deactivates on non-mouse input).
 - **Caps Word** — auto-shift the next word, releases on space/punctuation. Great for `SCREAMING_SNAKE_CASE`.
 - **Repeat Key / Magic Key** — re-fires the previous key; useful for repeated symbols (`==`, `..`, `->`) and to relieve pinky strain.
@@ -192,4 +195,3 @@ Ideas to consider after the base design has been used for a while:
 - **Swapper** — tri-state alt-tab window switching.
 - **Swap `;` and `'`** — make `'` the right-pinky home position; `;` moves to the symbol layer or top row.
 - **Move home-row mods to bottom row** — less mistrigger risk, but bottom row is more awkward to reach.
-- **Bilateral combinations** for layer triggers — sunaku's approach where layer holds require opposite-hand activation.
