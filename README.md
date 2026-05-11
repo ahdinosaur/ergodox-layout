@@ -1,8 +1,18 @@
-# ergodox-layout
+# qmk-keymap
 
-My personal [Ergodox EZ](https://www.zsa.io/ergodox/) keyboard layout, built as a [QMK External Userspace](https://docs.qmk.fm/newbs_external_userspace) repo on top of [QMK firmware](https://qmk.fm).
+My personal ergonomic split keyboard layouts.
+
+After using my Erogdox's on the same config for almost a decade, not once using layers, hold-keys, combos, or anything fancy, I'm going to experiment with a 3x5 keyboard layout to maybe learn something new.
+
+Built as a [QMK External Userspace](https://docs.qmk.fm/newbs_external_userspace) repo on top of [QMK firmware](https://qmk.fm).
+
+## Layout
 
 See [`keyboards/ergodox_ez/keymaps/dinosaur/keymap.c`](./keyboards/ergodox_ez/keymaps/dinosaur/keymap.c) for the layer mappings.
+
+## Keyboards
+
+- [Ergodox EZ](https://www.zsa.io/ergodox/)
 
 ## Setup
 
@@ -46,7 +56,11 @@ GUI alternatives: [Wally](https://www.zsa.io/wally) or [QMK Toolbox](https://git
 
 ## CI
 
-Every push and pull request runs the official QMK userspace [reusable workflow](https://github.com/qmk/.github/blob/main/.github/workflows/qmk_userspace_build.yml) to validate the firmware builds. Pushing a git tag additionally runs the [publish workflow](https://github.com/qmk/.github/blob/main/.github/workflows/qmk_userspace_publish.yml) to attach the `.hex` to a GitHub Release named after the tag. See [`.github/workflows/build.yml`](./.github/workflows/build.yml).
+Every push and pull request validates the firmware builds.
+
+Pushing a git tag runs the publish workflow to attach the `.hex` to a GitHub release named after the tag.
+
+See [`.github/workflows/build.yml`](./.github/workflows/build.yml).
 
 Cut a release with:
 
