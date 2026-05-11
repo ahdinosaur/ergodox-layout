@@ -49,6 +49,26 @@ Left primary   (Bsp) → Number    Right primary   (Spc) → Nav
 Left secondary (Del) → Symbol    Right tertiary  (Tab) → Fun
 ```
 
+### Primary / secondary / tertiary
+
+`primary`, `secondary`, and `tertiary` rank the three thumb keys by ergonomic accessibility, not by physical position. `primary` is the most natural reach (most-used: Bsp / Spc), `tertiary` is the most awkward (least-used: Esc / Tab). Which physical key takes each role depends on the board.
+
+Below, **inside** means "toward the hand" and **outside** means "toward the other half of the keyboard".
+
+**Ergodox EZ:**
+
+- `primary` → the big thumb key in the middle.
+- `secondary` → the other big thumb key, on the inside (toward the hand).
+- `tertiary` → the bottom small thumb key on the outside (toward the other side).
+
+**Cheapino** (and other 3-thumb-row boards in the Miryoku family — Corne, etc.):
+
+- `primary` → middle thumb.
+- `secondary` → outside thumb (toward the other side).
+- `tertiary` → inside thumb (toward the hand).
+
+Note that `secondary` and `tertiary` end up on opposite sides between the two boards. This isn't a contradiction: the labels rank ergonomic preference, and the Ergodox's `secondary` is a big key (more comfortable than any small key) so it stays second-best even on the inside; on a 3-key thumb row all keys are the same size, so accessibility comes down to reach distance and the outside (center-ward) reach wins.
+
 ## Additional features
 
 While any single-hand layer is held, the **trigger-side hand** gets these extras (inspired by Miryoku's "Additional Features"):
@@ -139,7 +159,7 @@ Hold right tertiary (Tab). Active: left hand.
   F11    F4     F5     F6     ScLk       NO     Sft    Ctl    Alt    Sup
   F10    F1     F2     F3     Paus       NO     Lc     Lo     NO     NO
 
-                Esc    Bsp    Del        NO     --     NO
+                Esc    Bsp    Del        NO     NO     --
 ```
 
 - Left thumbs stay as base (Esc/Bsp/Del), so they remain available (auto-repeat, normal use) while Fun is held.
@@ -154,7 +174,7 @@ Hold left tertiary (Esc). Active: right hand.
   Sup    Alt    Ctl    Sft    NO         Prev   VolDn  VolUp  Next   NO
   NO     NO     Lo     Lc     NO         Play   Stop   Mute   NO     NO
 
-                NO     --     NO         Ent    Spc    Tab
+                --     NO     NO         Ent    Spc    Tab
 ```
 
 - Right thumbs stay as base (Ent/Spc/Tab), so they remain available (auto-repeat, normal use) while Media is held.
