@@ -1,6 +1,6 @@
 # Layout design
 
-A 36-key (3×5 + 3 thumbs per hand) ergonomic split keyboard layout, designed for both the Ergodox EZ (extra outer columns left empty) and the Cheapino (true 3×5+3).
+A 36-key (3×5 + 3 thumbs per hand) ergonomic split keyboard layout design, designed for both the Ergodox EZ and the Cheapino.
 
 ## Conventions
 
