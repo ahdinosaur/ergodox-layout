@@ -62,14 +62,11 @@ Two pieces wire it up:
 
 ### Firmware side
 
-The [`ahdinosaur/keyboard_helper`](https://github.com/ahdinosaur/keyboard-helper) QMK [community module](https://docs.qmk.fm/features/community_modules) lives at:
-
-- `gitmodules/keyboard-helper/` — the upstream repo, vendored as a git submodule (keeps third-party sources out of `modules/`).
-- `modules/ahdinosaur/keyboard_helper` — a symlink pointing into the submodule's `firmware/qmk/keyboard_helper/` subdir. QMK only walks `modules/`, so it sees the module at the canonical `<user>/<module_name>` path.
+The [`ahdinosaur/keyboard-helper`](https://github.com/ahdinosaur/keyboard-helper) repo is vendored as a git submodule at `modules/ahdinosaur/keyboard-helper/`. It's a Rust + QMK monorepo, so the actual QMK [community module](https://docs.qmk.fm/features/community_modules) sits at `modules/ahdinosaur/keyboard-helper/firmware/qmk/keyboard_helper/` — QMK's module dispatch matches by path, so the keymap references that full depth.
 
 The keymap opts in via:
 
-- `keyboards/ergodox_ez/keymaps/dinosaur/keymap.json` — lists `ahdinosaur/keyboard_helper` in the `modules` array.
+- `keyboards/ergodox_ez/keymaps/dinosaur/keymap.json` — lists `ahdinosaur/keyboard-helper/firmware/qmk/keyboard_helper` in the `modules` array.
 - `keyboards/ergodox_ez/keymaps/dinosaur/config.h` — defines `KEYBOARD_HELPER_ID "ergodox-ez-dinosaur"` (matches the table key in `keymaps.toml`).
 - `keyboards/ergodox_ez/keymaps/dinosaur/keymap.c` — overrides `keyboard_helper_position_from_keypos` with a hand-built table mapping the ergodox matrix to `LAYOUT_ergodox` argument order. The module's default mapping is row-major matrix order, which the ergodox's permuted LAYOUT macro doesn't match.
 
