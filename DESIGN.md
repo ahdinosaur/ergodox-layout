@@ -34,20 +34,43 @@ Thumb layer-taps are marked `'*'` in `chordal_hold_layout` (exempt from the oppo
 ## Thumbs
 
 ```
-Left thumbs:    Esc    Bsp    Del
+Left thumbs:    Esc    Del    Bsp
                 (tertiary, primary, secondary)
 
-Right thumbs:   Ent    Spc    Tab
+Right thumbs:   Spc    Ent    Tab
                 (secondary, primary, tertiary)
 ```
 
-Each thumb is a layer-tap (`LT(layer, kc)`):
+Each thumb is a layer-tap (`LT(layer, kc)`). Layer is determined by the
+**position**, not the keycap — so the primary thumbs always trigger
+Number/Nav, the secondary thumbs always trigger Symbol (bilateral), and the
+tertiary thumbs always trigger Media/Fun.
 
 ```
-Left tertiary  (Esc) → Media     Right secondary (Ent) → Symbol
-Left primary   (Bsp) → Number    Right primary   (Spc) → Nav
-Left secondary (Del) → Symbol    Right tertiary  (Tab) → Fun
+Left tertiary  (Esc) → Media     Right secondary (Spc) → Symbol
+Left primary   (Del) → Number    Right primary   (Ent) → Nav
+Left secondary (Bsp) → Symbol    Right tertiary  (Tab) → Fun
 ```
+
+### Primary / secondary / tertiary
+
+`primary`, `secondary`, and `tertiary` rank the three thumb keys by ergonomic accessibility, not by physical position. `primary` is the most natural reach (Del / Ent), `tertiary` is the most awkward (Esc / Tab). Which physical key takes each role depends on the board.
+
+Below, **inside** means "toward the hand" and **outside** means "toward the other half of the keyboard".
+
+**Ergodox EZ:**
+
+- `primary` → the big thumb key in the middle.
+- `secondary` → the other big thumb key, on the inside (toward the hand).
+- `tertiary` → the bottom small thumb key on the outside (toward the other side).
+
+**Cheapino** (and other 3-thumb-row boards in the Miryoku family — Corne, etc.):
+
+- `primary` → middle thumb.
+- `secondary` → outside thumb (toward the other side).
+- `tertiary` → inside thumb (toward the hand).
+
+Note that `secondary` and `tertiary` end up on opposite sides between the two boards. This isn't a contradiction: the labels rank ergonomic preference, and the Ergodox's `secondary` is a big key (more comfortable than any small key) so it stays second-best even on the inside; on a 3-key thumb row all keys are the same size, so accessibility comes down to reach distance and the outside (center-ward) reach wins.
 
 ## Additional features
 
@@ -70,14 +93,14 @@ These do **not** apply to the Symbol layer (bilateral, no trigger-side hand).
   A      R      S      T      D          H      N      E      I      O
   Z      X      C      V      B          K      M      ,      .      /
 
-                Esc    Bsp    Del        Ent    Spc    Tab
+                Esc    Del    Bsp        Spc    Ent    Tab
 ```
 
 Home-row alphas are mod-taps. Thumbs are layer-taps. See sections above for assignments.
 
 ### Number layer
 
-Hold left primary (Bsp). Active: right hand.
+Hold left primary (Del). Active: right hand.
 
 ```
   Boot   NO     NO     NO     NO         /      7      8      9      -
@@ -93,24 +116,27 @@ Hold left primary (Bsp). Active: right hand.
 
 ### Navigation layer
 
-Hold right primary (Spc). Active: left hand.
+Hold right primary (Ent). Active: left hand.
 
 ```
   Redo   Paste  Copy   Cut    Undo       NO     NO     NO     NO     Boot
   Caps   Left   Down   Up     Right      NO     Sft    Ctl    Alt    Sup
   Ins    Home   PgDn   PgUp   End        NO     Lc     Lo     NO     NO
 
-                Esc    Bsp    Del        NO     --     NO
+                Esc    Del    Bsp        NO     --     NO
 ```
 
 - Inspired by Miryoku.
 - `Caps` = Caps Lock (`KC_CAPS`).
-- Left thumbs stay as base (Esc/Bsp/Del), so they remain available (auto-repeat, normal use) while Nav is held.
+- Left thumbs stay as base (Esc/Del/Bsp), so they remain available (auto-repeat, normal use) while Nav is held.
 - `Lo` = lock Number (opposite of Nav).
 
 ### Symbol layer
 
-Hold left secondary (Del) **or** right secondary (Ent). Active: both hands.
+Hold left secondary (Bsp) **or** right secondary (Spc). Active: both hands.
+
+On the Ergodox EZ, the inner-column upper-alpha key on either hand is an
+additional `MO(SYM)` trigger (alongside the secondary thumbs).
 
 ```
   !      @      #      $      %          ^      &      [      ]      |
@@ -139,10 +165,10 @@ Hold right tertiary (Tab). Active: left hand.
   F11    F4     F5     F6     ScLk       NO     Sft    Ctl    Alt    Sup
   F10    F1     F2     F3     Paus       NO     Lc     Lo     NO     NO
 
-                Esc    Bsp    Del        NO     --     NO
+                Esc    Del    Bsp        NO     NO     --
 ```
 
-- Left thumbs stay as base (Esc/Bsp/Del), so they remain available (auto-repeat, normal use) while Fun is held.
+- Left thumbs stay as base (Esc/Del/Bsp), so they remain available (auto-repeat, normal use) while Fun is held.
 - `Lo` = lock Media (opposite of Fun).
 
 ### Media layer
@@ -154,10 +180,10 @@ Hold left tertiary (Esc). Active: right hand.
   Sup    Alt    Ctl    Sft    NO         Prev   VolDn  VolUp  Next   NO
   NO     NO     Lo     Lc     NO         Play   Stop   Mute   NO     NO
 
-                NO     --     NO         Ent    Spc    Tab
+                --     NO     NO         Spc    Ent    Tab
 ```
 
-- Right thumbs stay as base (Ent/Spc/Tab), so they remain available (auto-repeat, normal use) while Media is held.
+- Right thumbs stay as base (Spc/Ent/Tab), so they remain available (auto-repeat, normal use) while Media is held.
 - Top row right hand intentionally empty for now.
 - `Lo` = lock Fun (opposite of Media).
 

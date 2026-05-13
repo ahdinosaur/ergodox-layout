@@ -1,179 +1,349 @@
 #include QMK_KEYBOARD_H
-#include "version.h"
 
+// Layers. Higher numbers win when multiple are held; SYM sits on top so it
+// can stack onto NUM/NAV/MED/FUN when both a primary/tertiary trigger and a
+// secondary trigger are pressed at the same time.
 enum layers {
-    BASE,  // default layer
-    SYMB,  // symbols
-    MDIA,  // media keys
+    BASE,
+    NUM,
+    NAV,
+    MED,
+    FUN,
+    SYM,
 };
 
 enum custom_keycodes {
-    VRSN = SAFE_RANGE,  // print firmware version
+    RIGHT_ARROW = SAFE_RANGE,
 };
 
-// Keycode reference: https://docs.qmk.fm/keycodes
+enum tap_dance_indices {
+    TD_BOOT,
+    TD_LC,
+    TD_LO,
+};
+
+// Home-row mod-tap aliases (GACS).
+#define HM_A LGUI_T(KC_A)
+#define HM_R LALT_T(KC_R)
+#define HM_S LCTL_T(KC_S)
+#define HM_T LSFT_T(KC_T)
+#define HM_N RSFT_T(KC_N)
+#define HM_E RCTL_T(KC_E)
+#define HM_I RALT_T(KC_I)
+#define HM_O RGUI_T(KC_O)
+
+// Layer-tap thumb aliases. Layer is determined by the thumb POSITION:
+// primary → NUM/NAV, secondary → SYM (bilateral), tertiary → MED/FUN.
+#define LT_ESC LT(MED, KC_ESC)
+#define LT_DEL LT(NUM, KC_DEL)
+#define LT_BSP LT(SYM, KC_BSPC)
+#define LT_SPC LT(SYM, KC_SPC)
+#define LT_ENT LT(NAV, KC_ENT)
+#define LT_TAB LT(FUN, KC_TAB)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-/* Keymap 0: Basic layer
- *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |   =    |   1  |   2  |   3  |   4  |   5  | LEFT |           | RIGHT|   6  |   7  |   8  |   9  |   0  |   -    |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Tab    |   Q  |   W  |   E  |   R  |   T  |  L1  |           |  L1  |   Y  |   U  |   I  |   O  |   P  |   \    |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | Esc    |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |   ;  |   '    |
- * |--------+------+------+------+------+------| LMeta|           | RMeta|------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Ctrl| RShift |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |Grv   | Ctrl | Alt  | Left | Right|                                       |  Up  | Down |   [  |   ]  | ~L2  |
- *   `----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,-------------.
- *                                        | App  | LMeta|       | Alt  | Ctrl |
- *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | Home |       | PgUp |        |      |
- *                                 | Back |Delete|------|       |------| Enter  |Space |
- *                                 | space|      | End  |       | PgDn |        |      |
- *                                 `--------------------'       `----------------------'
- */
+
+// BASE — Colemak with home-row mods on the home row and layer-tap thumbs.
+// Inner-column upper-alpha key is a bilateral MO(SYM), in addition to the
+// secondary-thumb LT_BSP/LT_SPC SYM triggers.
 [BASE] = LAYOUT_ergodox(
-    // left hand
-    KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_LEFT,
-    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    TG(SYMB),
-    KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,
+    // ---- LEFT HAND ----
+    // Row 0 (top — extras above the alpha grid)
+    KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_NO,
+    // Row 1 (alphas Q W F P G at args 1..5; inner-column = MO(SYM))
+    KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    MO(SYM),
+    // Row 2 (alphas A R S T D at args 1..5; home-row mods)
+    KC_ESC,  HM_A,    HM_R,    HM_S,    HM_T,    KC_D,
+    // Row 3 (alphas Z X C V B at args 1..5)
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_LGUI,
+    // Row 4 (extras below alphas)
     KC_GRV,  KC_LCTL, KC_LALT, KC_LEFT, KC_RGHT,
+    // Left thumb cluster, args 0..5. See DESIGN.md §Thumbs for the role-to-key
+    // mapping on the Ergodox EZ. The two big thumb keys are at args 3 and 4.
+    //   0 = extra (Home)
+    //   1 = extra (End)
+    //   2 = extra (empty)
+    //   3 = secondary (LT_BSP → SYM)
+    //   4 = primary   (LT_DEL → NUM)
+    //   5 = tertiary  (LT_ESC → MED)
+                                                 KC_HOME, KC_END,
+                                                          KC_NO,
+                                        LT_BSP,  LT_DEL,  LT_ESC,
 
-                                                 ALT_T(KC_APP), KC_LGUI,
-                                                                KC_HOME,
-                                        KC_BSPC, KC_DEL,        KC_END,
-
-    // right hand
-    KC_RGHT,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,           KC_MINS,
-    TG(SYMB), KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,           KC_BSLS,
-              KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,        KC_QUOT,
-    KC_RGUI,  KC_N,    KC_M,    KC_COMM, KC_DOT,  CTL_T(KC_SLSH), KC_RSFT,
-                       KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC,        MO(MDIA),
-
-    KC_LALT, KC_RCTL,
-    KC_PGUP,
-    KC_PGDN, KC_ENT, KC_SPC
+    // ---- RIGHT HAND ----
+    // Row 0 (top — extras)
+    KC_NO,   KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+    // Row 1 (alphas J L U Y ; at args 1..5; inner-column = MO(SYM))
+    MO(SYM), KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSLS,
+    // Row 2 (alphas H N E I O at args 0..4 — note: row 2 has only 6 args; outer-pinky extra is arg 5)
+             KC_H,    HM_N,    HM_E,    HM_I,    HM_O,    KC_QUOT,
+    // Row 3 (alphas K M , . / at args 1..5)
+    KC_RGUI, KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+    // Row 4 (extras)
+                      KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC, KC_NO,
+    // Right thumb cluster, args 0..5. See DESIGN.md §Thumbs for the role-to-key
+    // mapping on the Ergodox EZ. The two big thumb keys are at args 4 and 5.
+    //   0 = extra (PgUp)
+    //   1 = extra (PgDn)
+    //   2 = extra (empty)
+    //   3 = tertiary  (LT_TAB → FUN)
+    //   4 = primary   (LT_ENT → NAV)
+    //   5 = secondary (LT_SPC → SYM)
+    KC_PGUP, KC_PGDN,
+    KC_NO,
+    LT_TAB,  LT_ENT,  LT_SPC
 ),
-/* Keymap 1: Symbol Layer
- *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |Version |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |  F10 |   F11  |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |        |   !  |   @  |   {  |   }  |   |  |      |           |      |   Up |   7  |   8  |   9  |   *  |   F12  |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |   #  |   $  |   (  |   )  |   `  |------|           |------| Down |   4  |   5  |   6  |   +  |        |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |   %  |   ^  |   [  |   ]  |   ~  |      |           |      |   &  |   1  |   2  |   3  |   \  |        |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |EE_CLR|      |      |      |      |                                       |      |    . |   0  |   =  |      |
- *   `----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,-------------.
- *                                        |      |      |       |      |      |
- *                                 ,------|------|------|       |------+------+------.
- *                                 |      |      |      |       |      |      |      |
- *                                 |      |      |------|       |------|      |      |
- *                                 |      |      |      |       |      |      |      |
- *                                 `--------------------'       `--------------------'
- */
-[SYMB] = LAYOUT_ergodox(
-    // left hand
-    VRSN,    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______,
-    _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE, _______,
-    _______, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,
-    _______, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD, _______,
-    EE_CLR,  _______, _______, _______, _______,
 
-                                                 _______, _______,
-                                                          _______,
-                                        _______, _______, _______,
+// NUM — Number layer (right hand active; trigger LT_DEL on left primary thumb).
+[NUM] = LAYOUT_ergodox(
+    // ---- LEFT HAND (trigger-side) ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, TD(TD_BOOT), KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS,
+    KC_TRNS, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_NO,
+    KC_TRNS, KC_NO,   KC_NO,   TD(TD_LO), TD(TD_LC), KC_NO,  KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Left thumb: extras TRNS; trigger LT_DEL (primary, arg 4) TRNS; other LT thumbs NO
+                                                 KC_TRNS, KC_TRNS,
+                                                          KC_TRNS,
+                                        KC_NO,   KC_TRNS, KC_NO,
 
-    // right hand
-    _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-    _______, KC_UP,   KC_7,    KC_8,    KC_9,    KC_ASTR, KC_F12,
-             KC_DOWN, KC_4,    KC_5,    KC_6,    KC_PLUS, _______,
-    _______, KC_AMPR, KC_1,    KC_2,    KC_3,    KC_BSLS, _______,
-                      _______, KC_DOT,  KC_0,    KC_EQL,  _______,
-
-    _______, _______,
-    _______,
-    _______, _______, _______
+    // ---- RIGHT HAND (active — numpad) ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_SLSH, KC_7,    KC_8,    KC_9,    KC_MINS, KC_TRNS,
+             KC_ASTR, KC_4,    KC_5,    KC_6,    KC_PLUS, KC_TRNS,
+    KC_TRNS, KC_PERC, KC_1,    KC_2,    KC_3,    KC_CIRC, KC_TRNS,
+                      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Right thumb: extras TRNS; numpad continuation `. 0 =` on secondary (arg 5) / primary (arg 4) / tertiary (arg 3).
+    KC_TRNS, KC_TRNS,
+    KC_TRNS,
+    KC_EQL,  KC_0,    KC_DOT
 ),
-/* Keymap 2: Media and mouse keys
- *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |        |      |      | MsUp |      |      |      |           |      |      |      |      |      |      |        |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |      |MsLeft|MsDown|MsRght|      |------|           |------|      |      |      |      |      |  Play  |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |      |      |      |      |      |      |           |      |      |      | Prev | Next |      |        |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |      |      | Lclk | Rclk |                                       |VolUp |VolDn | Mute |      |      |
- *   `----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,-------------.
- *                                        |      |      |       |      |      |
- *                                 ,------|------|------|       |------+------+------.
- *                                 |      |      |      |       |      |      |Brwser|
- *                                 |      |      |------|       |------|      |Back  |
- *                                 |      |      |      |       |      |      |      |
- *                                 `--------------------'       `--------------------'
- */
-[MDIA] = LAYOUT_ergodox(
-    // left hand
-    _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, MS_UP,   _______, _______, _______,
-    _______, _______, MS_LEFT, MS_DOWN, MS_RGHT, _______,
-    _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, MS_BTN1, MS_BTN2,
 
-                                                 _______, _______,
-                                                          _______,
-                                        _______, _______, _______,
+// NAV — Navigation layer (left hand active; trigger LT_ENT on right primary thumb).
+[NAV] = LAYOUT_ergodox(
+    // ---- LEFT HAND (active) ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, C(KC_Y), C(KC_V), C(KC_C), C(KC_X), C(KC_Z), KC_TRNS,
+    KC_TRNS, KC_CAPS, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
+    KC_TRNS, KC_INS,  KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Left thumb (active-side, "stay as base"): all TRNS
+                                                 KC_TRNS, KC_TRNS,
+                                                          KC_TRNS,
+                                        KC_TRNS, KC_TRNS, KC_TRNS,
 
-    // right hand
-    _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______, _______,
-             _______, _______, _______, _______, _______, KC_MPLY,
-    _______, _______, _______, KC_MPRV, KC_MNXT, _______, _______,
-                      KC_VOLU, KC_VOLD, KC_MUTE, _______, _______,
-
-    _______, _______,
-    _______,
-    _______, _______, KC_WBAK
+    // ---- RIGHT HAND (trigger-side) ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_NO,   KC_NO,   KC_NO,   KC_NO,   TD(TD_BOOT), KC_TRNS,
+             KC_NO,   KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, KC_TRNS,
+    KC_TRNS, KC_NO,   TD(TD_LC), TD(TD_LO), KC_NO, KC_NO, KC_TRNS,
+                      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Right thumb: extras TRNS; trigger LT_ENT (primary, arg 4) TRNS; other LT thumbs NO
+    KC_TRNS, KC_TRNS,
+    KC_TRNS,
+    KC_NO,   KC_TRNS, KC_NO
 ),
+
+// MED — Media layer (right hand active; trigger LT_ESC on left tertiary thumb).
+[MED] = LAYOUT_ergodox(
+    // ---- LEFT HAND (trigger-side) ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, TD(TD_BOOT), KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS,
+    KC_TRNS, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_NO,
+    KC_TRNS, KC_NO,   KC_NO,   TD(TD_LO), TD(TD_LC), KC_NO, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Left thumb: extras TRNS; trigger LT_ESC (tertiary, arg 5) TRNS; other LT thumbs NO
+                                                 KC_TRNS, KC_TRNS,
+                                                          KC_TRNS,
+                                        KC_NO,   KC_NO,   KC_TRNS,
+
+    // ---- RIGHT HAND (active) ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_TRNS,
+             KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, KC_NO,   KC_TRNS,
+    KC_TRNS, KC_MPLY, KC_MSTP, KC_MUTE, KC_NO,   KC_NO,   KC_TRNS,
+                      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Right thumb (active-side, "stay as base"): all TRNS
+    KC_TRNS, KC_TRNS,
+    KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS
+),
+
+// FUN — Function layer (left hand active; trigger LT_TAB on right tertiary thumb).
+[FUN] = LAYOUT_ergodox(
+    // ---- LEFT HAND (active — F-keys) ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR, KC_TRNS,
+    KC_TRNS, KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SCRL,
+    KC_TRNS, KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Left thumb (active-side, "stay as base"): all TRNS
+                                                 KC_TRNS, KC_TRNS,
+                                                          KC_TRNS,
+                                        KC_TRNS, KC_TRNS, KC_TRNS,
+
+    // ---- RIGHT HAND (trigger-side) ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_NO,   KC_NO,   KC_NO,   KC_NO,   TD(TD_BOOT), KC_TRNS,
+             KC_NO,   KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, KC_TRNS,
+    KC_TRNS, KC_NO,   TD(TD_LC), TD(TD_LO), KC_NO, KC_NO, KC_TRNS,
+                      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Right thumb: extras TRNS; trigger LT_TAB (tertiary, arg 3) TRNS; other LT thumbs NO
+    KC_TRNS, KC_TRNS,
+    KC_TRNS,
+    KC_TRNS, KC_NO,   KC_NO
+),
+
+// SYM — Symbol layer (bilateral; triggers LT_BSP on left secondary OR LT_SPC on right secondary;
+// also MO(SYM) on inner-column upper-alpha row of either hand).
+[SYM] = LAYOUT_ergodox(
+    // ---- LEFT HAND ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_TRNS,
+    KC_TRNS, KC_ASTR, KC_UNDS, KC_MINS, KC_EQL,  KC_DQT,
+    KC_TRNS, KC_TILD, KC_SLSH, KC_PLUS, KC_GRV,  KC_QUOT, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Left thumb: extras TRNS; trigger LT_BSP (secondary, arg 3) TRNS; other LT thumbs NO
+                                                 KC_TRNS, KC_TRNS,
+                                                          KC_TRNS,
+                                        KC_TRNS, KC_NO,   KC_NO,
+
+    // ---- RIGHT HAND ----
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_CIRC, KC_AMPR, KC_LBRC, KC_RBRC, KC_PIPE, KC_TRNS,
+             KC_COLN, KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR, KC_TRNS,
+    KC_TRNS, KC_BSLS, RIGHT_ARROW, KC_LT, KC_GT, KC_QUES, KC_TRNS,
+                      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    // Right thumb: extras TRNS; trigger LT_SPC (secondary, arg 5) TRNS; other LT thumbs NO
+    KC_TRNS, KC_TRNS,
+    KC_TRNS,
+    KC_NO,   KC_NO,   KC_TRNS
+),
+
+};
+
+// chordal_hold_layout: 'L' = left hand, 'R' = right hand, '*' = exempt from
+// the opposite-hands rule. The 6 layer-tap thumbs are '*' so the trigger-side
+// Boot/Lc/Lo extras (on the SAME hand as the held thumb) can chord with the
+// thumb. All other positions are tagged by hand.
+const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
+    LAYOUT_ergodox(
+        // ---- LEFT HAND ----
+        'L','L','L','L','L','L','L',
+        'L','L','L','L','L','L','L',
+        'L','L','L','L','L','L',
+        'L','L','L','L','L','L','L',
+        'L','L','L','L','L',
+        // Left thumb: LT thumbs '*' (args 3, 4, 5); extras 'L' (args 0, 1, 2)
+                                  'L','L',
+                                       'L',
+                              '*','*','*',
+
+        // ---- RIGHT HAND ----
+        'R','R','R','R','R','R','R',
+        'R','R','R','R','R','R','R',
+        'R','R','R','R','R','R',
+        'R','R','R','R','R','R','R',
+        'R','R','R','R','R',
+        // Right thumb: LT thumbs '*' (args 3, 4, 5); extras 'R' (args 0, 1, 2)
+        'R','R',
+            'R',
+        '*','*','*'
+    );
+
+// Flow Tap: limit to alpha/punctuation typing keys. Omitting KC_SPC (and
+// implicitly all other layer-tap thumb tap-keycodes — KC_BSPC, KC_DEL,
+// KC_ENT, KC_TAB, KC_ESC) lets the thumbs activate their layers without
+// Flow Tap forcing them to their tap action during fast typing.
+bool is_flow_tap_key(uint16_t keycode) {
+    switch (get_tap_keycode(keycode)) {
+        case KC_A ... KC_Z:
+        case KC_DOT:
+        case KC_COMM:
+        case KC_SCLN:
+        case KC_SLSH:
+            return true;
+    }
+    return false;
+}
+
+// Tap dance: all three keys do nothing on a single tap and fire on the
+// second tap. This prevents accidental triggering of bootloader / layer-lock
+// while typing on the trigger-side hand of a held layer.
+static void td_boot_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count >= 2) reset_keyboard();
+}
+
+static void td_lc_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count >= 2) {
+        layer_lock_invert(get_highest_layer(layer_state));
+    }
+}
+
+static void td_lo_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count < 2) return;
+    switch (get_highest_layer(layer_state)) {
+        case NUM: layer_lock_invert(NAV); break;
+        case NAV: layer_lock_invert(NUM); break;
+        case MED: layer_lock_invert(FUN); break;
+        case FUN: layer_lock_invert(MED); break;
+        // BASE and SYM intentionally do nothing — Lc/Lo aren't reachable from those layers.
+    }
+}
+
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_BOOT] = ACTION_TAP_DANCE_FN(td_boot_finished),
+    [TD_LC]   = ACTION_TAP_DANCE_FN(td_lc_finished),
+    [TD_LO]   = ACTION_TAP_DANCE_FN(td_lo_finished),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed) {
-        switch (keycode) {
-            case VRSN:
-                SEND_STRING(QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
-                return false;
-        }
+    switch (keycode) {
+        case RIGHT_ARROW:
+            if (record->event.pressed) {
+                SEND_STRING("->");
+            }
+            return false;
     }
     return true;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    ergodox_board_led_off();
     ergodox_right_led_1_off();
     ergodox_right_led_2_off();
     ergodox_right_led_3_off();
 
     switch (get_highest_layer(state)) {
-        case SYMB:
+        case NUM:
             ergodox_right_led_1_on();
             break;
-        case MDIA:
+        case NAV:
             ergodox_right_led_2_on();
+            break;
+        case MED:
+            ergodox_right_led_1_on();
+            ergodox_right_led_3_on();
+            break;
+        case FUN:
+            ergodox_right_led_2_on();
+            ergodox_right_led_3_on();
+            break;
+        case SYM:
+            ergodox_right_led_3_on();
             break;
         default:
             break;
     }
 
     return state;
+}
+
+// Light the on-board (left half) LED whenever any layer is locked.
+bool layer_lock_set_user(layer_state_t locked_layers) {
+    if (locked_layers) {
+        ergodox_board_led_on();
+    } else {
+        ergodox_board_led_off();
+    }
+    return true;
 }
