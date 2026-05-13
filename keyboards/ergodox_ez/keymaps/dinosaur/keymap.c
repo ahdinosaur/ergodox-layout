@@ -347,3 +347,55 @@ bool layer_lock_set_user(layer_state_t locked_layers) {
     }
     return true;
 }
+
+// Override the ahdinosaur/keyboard_helper community module's default
+// `row * MATRIX_COLS + col` because `LAYOUT_ergodox` permutes the
+// matrix into physical-visual order. The host-side visualizer keys
+// positions off LAYOUT-arg index (= the flat key order in
+// ergodox-ez-dinosaur.yaml), so without this override every press
+// would highlight the wrong cell. Layer indication does not depend
+// on position and works either way.
+//
+// The map is derived from
+// `qmk_firmware/keyboards/ergodox_ez/info.json` →
+// `layouts.LAYOUT_ergodox.layout`: each entry there is one LAYOUT
+// argument, and its `matrix: [row, col]` field gives the matrix
+// position that argument fills. The 8 entries written `KH_NO_POS`
+// are matrix slots with no physical key; a correctly wired ergodox
+// will never fire an event from them, but a deliberate sentinel
+// beats falling back to a default that would alias a valid index.
+#define KH_NO_POS 0xFFFFu
+
+// Pin the table to the matrix shape it was hand-built for. If QMK
+// ever changes the ergodox_ez matrix dimensions the array would
+// resize silently and the extra slots would default-init to 0 — a
+// valid LAYOUT index — aliasing every press into the top-left key.
+_Static_assert(MATRIX_ROWS == 14 && MATRIX_COLS == 6,
+               "kh_layout_arg_index is hand-derived for ergodox_ez 14x6; "
+               "regenerate from info.json if matrix dims change.");
+
+static const uint16_t kh_layout_arg_index[MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
+    // Left half. col 5 = left thumb cluster.
+    /*  0 */ {  0,  7, 14, 20, 27, KH_NO_POS },
+    /*  1 */ {  1,  8, 15, 21, 28, 37 },
+    /*  2 */ {  2,  9, 16, 22, 29, 36 },
+    /*  3 */ {  3, 10, 17, 23, 30, 35 },
+    /*  4 */ {  4, 11, 18, 24, 31, 34 },
+    /*  5 */ {  5, 12, 19, 25, KH_NO_POS, 32 },
+    /*  6 */ {  6, 13, KH_NO_POS, 26, KH_NO_POS, 33 },
+    // Right half. col 5 = right thumb cluster.
+    /*  7 */ { 38, 45, KH_NO_POS, 58, KH_NO_POS, 70 },
+    /*  8 */ { 39, 46, 52, 59, KH_NO_POS, 71 },
+    /*  9 */ { 40, 47, 53, 60, 65, 72 },
+    /* 10 */ { 41, 48, 54, 61, 66, 75 },
+    /* 11 */ { 42, 49, 55, 62, 67, 74 },
+    /* 12 */ { 43, 50, 56, 63, 68, 73 },
+    /* 13 */ { 44, 51, 57, 64, 69, KH_NO_POS },
+};
+
+uint16_t keyboard_helper_position_from_keypos(keypos_t key) {
+    if (key.row >= MATRIX_ROWS || key.col >= MATRIX_COLS) {
+        return KH_NO_POS;
+    }
+    return pgm_read_word(&kh_layout_arg_index[key.row][key.col]);
+}
