@@ -1,0 +1,158 @@
+# keymap-drawer YAML for the `dinosaur` ergodox_ez layout.
+#
+# Layer order and per-layer key order mirror the LAYOUT_ergodox(...)
+# argument order in `keyboards/ergodox_ez/keymaps/dinosaur/keymap.c`.
+# Labels are display strings only; see DESIGN.md for the rationale
+# behind each layer.
+#
+# Conventions:
+#   ""                  → KC_NO or KC_TRNS (no action / passthrough).
+#   {t: X, h: Y}        → tap X, hold Y (mod-taps and layer-taps).
+#   "SYM"               → momentary layer hold (MO(SYM)).
+#   "Boot" "Lc" "Lo"    → tap-dance keys (double-tap activators).
+#   "Sup/Alt/Ctl/Sft"   → plain modifier keys.
+
+layout:
+  qmk_keyboard: ergodox_ez
+  layout_name: LAYOUT_ergodox
+
+layers:
+  # Colemak with home-row mods (GACS) and layer-tap thumbs.
+  BASE:
+    # left hand
+    - ["=", "1", "2", "3", "4", "5", ""]
+    - [Tab, Q, W, F, P, G, SYM]
+    - [Esc, {t: A, h: Sup}, {t: R, h: Alt}, {t: S, h: Ctl}, {t: T, h: Sft}, D]
+    - [Shift, Z, X, C, V, B, Sup]
+    - ["`", Ctl, Alt, Left, Right]
+    # left thumb
+    - [Home, End]
+    - ""
+    - [{t: BSpace, h: SYM}, {t: Delete, h: NUM}, {t: Esc, h: MED}]
+    # right hand
+    - ["", "6", "7", "8", "9", "0", "-"]
+    - [SYM, J, L, U, Y, ";", "\\"]
+    - [H, {t: N, h: Sft}, {t: E, h: Ctl}, {t: I, h: Alt}, {t: O, h: Sup}, "'"]
+    - [Sup, K, M, ",", ".", "/", Shift]
+    - [Up, Down, "[", "]", ""]
+    # right thumb
+    - [PgUp, PgDn]
+    - ""
+    - [{t: Tab, h: FUN}, {t: Enter, h: NAV}, {t: Space, h: SYM}]
+
+  # Number layer — hold left primary (Del). Active: right hand.
+  NUM:
+    # left hand (trigger-side)
+    - ["", "", "", "", "", "", ""]
+    - ["", Boot, "", "", "", "", ""]
+    - ["", Sup, Alt, Ctl, Sft, ""]
+    - ["", "", "", Lo, Lc, "", ""]
+    - ["", "", "", "", ""]
+    # left thumb
+    - ["", ""]
+    - ""
+    - ["", "", ""]
+    # right hand (active — numpad)
+    - ["", "", "", "", "", "", ""]
+    - ["", "/", "7", "8", "9", "-", ""]
+    - ["*", "4", "5", "6", "+", ""]
+    - ["", "%", "1", "2", "3", "^", ""]
+    - ["", "", "", "", ""]
+    # right thumb
+    - ["", ""]
+    - ""
+    - ["=", "0", "."]
+
+  # Navigation layer — hold right primary (Ent). Active: left hand.
+  NAV:
+    # left hand (active)
+    - ["", "", "", "", "", "", ""]
+    - ["", Redo, Paste, Copy, Cut, Undo, ""]
+    - ["", Caps, Left, Down, Up, Right]
+    - ["", Ins, Home, PgDn, PgUp, End, ""]
+    - ["", "", "", "", ""]
+    # left thumb (stays as base)
+    - ["", ""]
+    - ""
+    - ["", "", ""]
+    # right hand (trigger-side)
+    - ["", "", "", "", "", "", ""]
+    - ["", "", "", "", "", Boot, ""]
+    - ["", Sft, Ctl, Alt, Sup, ""]
+    - ["", "", Lc, Lo, "", "", ""]
+    - ["", "", "", "", ""]
+    # right thumb
+    - ["", ""]
+    - ""
+    - ["", "", ""]
+
+  # Media layer — hold left tertiary (Esc). Active: right hand.
+  MED:
+    # left hand (trigger-side)
+    - ["", "", "", "", "", "", ""]
+    - ["", Boot, "", "", "", "", ""]
+    - ["", Sup, Alt, Ctl, Sft, ""]
+    - ["", "", "", Lo, Lc, "", ""]
+    - ["", "", "", "", ""]
+    # left thumb
+    - ["", ""]
+    - ""
+    - ["", "", ""]
+    # right hand (active — media)
+    - ["", "", "", "", "", "", ""]
+    - ["", "", "", "", "", "", ""]
+    - [Prev, VolDn, VolUp, Next, "", ""]
+    - ["", Play, Stop, Mute, "", "", ""]
+    - ["", "", "", "", ""]
+    # right thumb (stays as base)
+    - ["", ""]
+    - ""
+    - ["", "", ""]
+
+  # Function layer — hold right tertiary (Tab). Active: left hand.
+  FUN:
+    # left hand (active — F-keys)
+    - ["", "", "", "", "", "", ""]
+    - ["", F12, F7, F8, F9, PrSc, ""]
+    - ["", F11, F4, F5, F6, ScLk]
+    - ["", F10, F1, F2, F3, Paus, ""]
+    - ["", "", "", "", ""]
+    # left thumb (stays as base)
+    - ["", ""]
+    - ""
+    - ["", "", ""]
+    # right hand (trigger-side)
+    - ["", "", "", "", "", "", ""]
+    - ["", "", "", "", "", Boot, ""]
+    - ["", Sft, Ctl, Alt, Sup, ""]
+    - ["", "", Lc, Lo, "", "", ""]
+    - ["", "", "", "", ""]
+    # right thumb
+    - ["", ""]
+    - ""
+    - ["", "", ""]
+
+  # Symbol layer — bilateral; hold left secondary (Bsp) OR right
+  # secondary (Spc), or the inner-column upper-alpha key on either hand
+  # (additional MO(SYM)).
+  SYM:
+    # left hand
+    - ["", "", "", "", "", "", ""]
+    - ["", "!", "@", "#", "$", "%", ""]
+    - ["", "*", "_", "-", "=", '"']
+    - ["", "~", "/", "+", "`", "'", ""]
+    - ["", "", "", "", ""]
+    # left thumb
+    - ["", ""]
+    - ""
+    - ["", "", ""]
+    # right hand
+    - ["", "", "", "", "", "", ""]
+    - ["", "^", "&", "[", "]", "|", ""]
+    - [":", "(", ")", "{", "}", ""]
+    - ["", "\\", "→", "<", ">", "?", ""]
+    - ["", "", "", "", ""]
+    # right thumb
+    - ["", ""]
+    - ""
+    - ["", "", ""]
