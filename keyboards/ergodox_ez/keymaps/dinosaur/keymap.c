@@ -201,7 +201,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     KC_TRNS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_TRNS,
     KC_TRNS, KC_ASTR, KC_UNDS, KC_MINS, KC_EQL,  KC_DQT,
-    KC_TRNS, KC_TILD, KC_SLSH, KC_PLUS, KC_GRV,  KC_QUOT, KC_TRNS,
+    KC_TRNS, KC_TILD, KC_SLSH, KC_PLUS, KC_QUOT, KC_GRV,  KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     // Left thumb: extras TRNS; trigger LT_BSP (secondary, arg 3) TRNS; other LT thumbs NO
                                                  KC_TRNS, KC_TRNS,

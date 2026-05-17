@@ -141,7 +141,7 @@ additional `MO(SYM)` trigger (alongside the secondary thumbs).
 ```
   !      @      #      $      %          ^      &      [      ]      |
   *      _      -      =      "          :      (      )      {      }
-  ~      /      +      `      '          \      →      <      >      ?
+  ~      /      +      '      `          \      →      <      >      ?
 
                 NO     NO     --         --     NO     NO
 ```
